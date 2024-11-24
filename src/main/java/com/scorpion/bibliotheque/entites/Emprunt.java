@@ -9,21 +9,25 @@ public class Emprunt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Livre livre;
-    @ManyToOne
-    private Adherent adherent;
-    private LocalDate dateEmprunt;
-    private LocalDate dateRetourPrevue;
+ 
+    private Long clientId;
+
+    private Long livreId;
+
+    @Column(updatable = false)
+    private LocalDate dateEmprunt = LocalDate.now();
+
+    @Column(updatable = false)
+    private LocalDate dateRetourPrevue = LocalDate.now().plusDays(7);
 
     public Emprunt(){
         
     }
 
-    public Emprunt(Long id, Livre livre, Adherent adherent, LocalDate dateEmprunt, LocalDate dateRetourPrevue) {
+    public Emprunt(Long id, Long clientId, Long livreId, LocalDate dateEmprunt, LocalDate dateRetourPrevue) {
         this.id = id;
-        this.livre = livre;
-        this.adherent = adherent;
+        this.clientId = clientId;
+        this.livreId = livreId;
         this.dateEmprunt = dateEmprunt;
         this.dateRetourPrevue = dateRetourPrevue;
     }
@@ -34,18 +38,7 @@ public class Emprunt {
     public void setId(Long id) {
         this.id = id;
     }
-    public Livre getLivre() {
-        return livre;
-    }
-    public void setLivre(Livre livre) {
-        this.livre = livre;
-    }
-    public Adherent getAdherent() {
-        return adherent;
-    }
-    public void setAdherent(Adherent adherent) {
-        this.adherent = adherent;
-    }
+    
     public LocalDate getDateEmprunt() {
         return dateEmprunt;
     }
@@ -57,6 +50,22 @@ public class Emprunt {
     }
     public void setDateRetourPrevue(LocalDate dateRetourPrevue) {
         this.dateRetourPrevue = dateRetourPrevue;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public Long getLivreId() {
+        return livreId;
+    }
+
+    public void setLivreId(Long livreId) {
+        this.livreId = livreId;
     }
     
 }

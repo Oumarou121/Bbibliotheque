@@ -9,20 +9,30 @@ public class Adherent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Client client;
-    private LocalDate dateAdherent;
-    private LocalDate dateFinAdherent;
+
+    private Long clientId;
+
+    @Column(updatable = false)
+    private LocalDate dateAdherent = LocalDate.now();
+
+    @Column(updatable = false)
+    private LocalDate dateFinAdherent = LocalDate.now().plusDays(30);
+
+    private Long type;
+
+    private Long nbrEmprunt;
 
     public Adherent(){
         
     }
 
-    public Adherent(Long id, Client client, LocalDate dateAdherent, LocalDate dateFinAdherent) {
+    public Adherent(Long id, Long clientId, LocalDate dateAdherent, LocalDate dateFinAdherent, Long type, Long nbrEmprunt) {
         this.id = id;
-        this.client = client;
+        this.clientId = clientId;
         this.dateAdherent = dateAdherent;
         this.dateFinAdherent = dateFinAdherent;
+        this.type = type;
+        this.nbrEmprunt = nbrEmprunt;
     }
     // Getters et setters
     public Long getId() {
@@ -32,12 +42,12 @@ public class Adherent {
         this.id = id;
     }
     
-    public Client getClient(){
-        return client;
+    public Long getClientId(){
+        return clientId;
     }
 
-    public void setClient(Client client){
-        this.client = client;
+    public void setClientId(Long clientId){
+        this.clientId = clientId;
     }
     public LocalDate getDateAdherent() {
         return dateAdherent;
@@ -51,6 +61,21 @@ public class Adherent {
     public void setDateFinAdherent(LocalDate dateFinAdherent) {
         this.dateFinAdherent = dateFinAdherent;
     }
+
+    public Long getType() {
+        return type;
+    }
+
+    public void setType(Long type) {
+        this.type = type;
+    }
     
+    public Long getNbrEmprunt() {
+        return nbrEmprunt;
+    }
+
+    public void setNbrEmprunt(Long nbrEmprunt) {
+        this.nbrEmprunt = nbrEmprunt;
+    }
 }
 

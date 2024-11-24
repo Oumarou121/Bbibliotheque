@@ -1,6 +1,8 @@
 package com.scorpion.bibliotheque.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.scorpion.bibliotheque.entites.Emprunt;
@@ -16,13 +18,27 @@ public class EmpruntController {
     private EmpruntService empruntService;
 
     @PostMapping
-    public Emprunt ajouterEmprunt(@RequestBody Emprunt emprunt) {
-        return empruntService.ajouterEmprunt(emprunt);
+    public ResponseEntity<?> ajouterEmprunt(@RequestBody Emprunt emprunt) {
+        try {
+            Emprunt nouvelEmprunt = empruntService.ajouterEmprunt(emprunt);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nouvelEmprunt);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur inattendue : " + e.getMessage());
+        }
     }
 
+    // @GetMapping("/{id}")
+    // public Optional<Emprunt> trouverEmpruntParId(@PathVariable Long id) {
+    //     return empruntService.trouverEmpruntParId(id);
+    // }
+
     @GetMapping("/{id}")
-    public Optional<Emprunt> trouverEmpruntParId(@PathVariable Long id) {
-        return empruntService.trouverEmpruntParId(id);
+    public List<Emprunt> trouverEmpruntParId(@PathVariable Long id) {
+        return empruntService.listerTousLesEmpruntsParClient(id);
     }
 
     @GetMapping
