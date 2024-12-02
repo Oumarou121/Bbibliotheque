@@ -10,9 +10,13 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nom;
-    private String prenom;
+    private String adresse;
+    private String telephone;
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String role;
 
     @Column(nullable = false)
     private String password;
@@ -21,12 +25,14 @@ public class Client {
 
     }
 
-    public Client(long id, String email, String nom, String prenom, String password) {
+    public Client(long id, String email, String nom, String adresse, String telephone, String password, String role) {
         this.id = id;
         this.email = email;
         this.nom = nom;
-        this.prenom = prenom;
+        this.adresse = adresse;
+        this.telephone = telephone;
         this.password = password;
+        this.role = role;
     }
 
 
@@ -54,20 +60,37 @@ public class Client {
         this.nom = nom;
     }
 
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
     public String getPassword() {
         return password;
+    }
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    
 
 }

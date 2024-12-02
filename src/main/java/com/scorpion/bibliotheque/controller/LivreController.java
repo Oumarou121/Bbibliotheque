@@ -1,6 +1,8 @@
 package com.scorpion.bibliotheque.controller;
 
+import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scorpion.bibliotheque.entites.Livre;
+import com.scorpion.bibliotheque.entites.LivreDTO;
 import com.scorpion.bibliotheque.services.LivreService;
+
 
 @RestController
 @RequestMapping("/api/livres")
@@ -32,15 +36,42 @@ public class LivreController {
         return livreService.getAllLivres();
     }
 
+    @GetMapping("/{id}")
+    public Optional<Livre> getLivreById(@PathVariable Long id) {
+        return livreService.getLivreById(id);
+    }
+    
+
+    // @PostMapping
+    // public Livre createLivre(@RequestBody Livre livre) {
+    //     return livreService.createLivre(livre);
+    // }
+
     @PostMapping
-    public Livre createLivre(@RequestBody Livre livre) {
-        return livreService.createLivre(livre);
+    public Livre ajouterLivre(@RequestBody LivreDTO livreDTO){
+        try{
+
+            byte[] imageData = Base64.getDecoder().decode(livreDTO.getImage());
+            return livreService.ajouterLivre(livreDTO.getTitre(), livreDTO.getAuteur(), livreDTO.getAnneePublication(), livreDTO.getQuantite(), livreDTO.getNbrEmprunt(), livreDTO.getDescription(),imageData);
+             
+        }catch (Exception e){
+            return null;
+        }
     }
 
+    // @PutMapping("/{id}")
+    // public Livre updateLivre(@PathVariable Long id, @RequestBody LivreDTO livreDetails) {
+    //     Livre livre = new Livre(livreDetails.get);
+    //     return livreService.updateLivre(id, livre);
+    // }
+
     @PutMapping("/{id}")
-    public Livre updateLivre(@PathVariable Long id, @RequestBody Livre livreDetails) {
-        return livreService.updateLivre(id, livreDetails);
+    public Livre updateLivre(@PathVariable Long id, @RequestBody LivreDTO livreDTO) {
+        byte[] imageData = Base64.getDecoder().decode(livreDTO.getImage());
+        return livreService.updateLivre(id, livreDTO.getTitre(), livreDTO.getAuteur(), livreDTO.getAnneePublication(), livreDTO.getQuantite(), livreDTO.getNbrEmprunt(), livreDTO.getDescription(),imageData);
     }
+
+    
 
     @DeleteMapping("/{id}")
     public void deleteLivre(@PathVariable Long id) {

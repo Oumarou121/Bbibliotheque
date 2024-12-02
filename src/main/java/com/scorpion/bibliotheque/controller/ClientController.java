@@ -69,6 +69,8 @@ import com.scorpion.bibliotheque.services.ClientService;
 import com.scorpion.bibliotheque.services.InvalidTokenService;
 import com.scorpion.bibliotheque.utils.LoginRequest;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,6 +95,16 @@ public class ClientController {
         try {
             String token = clientService.register(client);
             return ResponseEntity.ok().body("Bearer " + token);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/admin/register")
+    public ResponseEntity<?> registerAdmin(@Valid @RequestBody Client client) {
+        try {
+            String token = clientService.register(client);
+            return ResponseEntity.ok().body(client.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -143,21 +155,37 @@ public ResponseEntity<?> logout(@RequestHeader("Authorization") String authoriza
     return ResponseEntity.ok("Déconnexion réussie. Token invalidé.");
 }
 
-@GetMapping("/me")
-public ResponseEntity<?> getClientInfo(@RequestHeader("Authorization") String authorizationHeader) {
-    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-        return ResponseEntity.badRequest().body("Token manquant ou invalide.");
+    @GetMapping("/me")
+    public ResponseEntity<?> getClientInfo(@RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest().body("Token manquant ou invalide.");
+        }
+
+        String token = authorizationHeader.substring(7); // Enlever le "Bearer " du token
+        try {
+            // Obtenez le client en validant le token
+            Client client = clientService.getClientFromToken(token);
+            return ResponseEntity.ok(client);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    String token = authorizationHeader.substring(7); // Enlever le "Bearer " du token
-    try {
-        // Obtenez le client en validant le token
-        Client client = clientService.getClientFromToken(token);
-        return ResponseEntity.ok(client);
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    @PutMapping("/{id}")
+    public Client updateClient(
+            @PathVariable Long id, 
+            @RequestBody Client clientDetails) {
+        return clientService.updateClient(id, clientDetails);
     }
-}
 
+    @GetMapping
+    public List<Client> getAllClients(){
+        return clientService.getAllClients();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteClient(@PathVariable Long id){
+        clientService.deleteClient(id);
+    }
 
 }

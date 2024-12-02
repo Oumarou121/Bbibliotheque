@@ -16,34 +16,44 @@ import java.time.LocalDate;
 @Service
 public class AdherentService {
     @Autowired
-    private AdherentRepository adherentRepository;
+private AdherentRepository adherentRepository;
 
-    public Adherent ajouterAdherent(Adherent adherent) {
-        List<Adherent> adherentAll = trouverAdherentsParClient(adherent.getClientId());
-        
-        if (adherentAll.isEmpty()) {
-            return adherentRepository.save(adherent);
-        } else {
-            Adherent lastAdherent = adherentAll.get(adherentAll.size() - 1);  
-            
-            if (lastAdherent != null && lastAdherent.getDateFinAdherent() != null) {
-                LocalDate currentDate = LocalDate.now();
-                LocalDate dateFinAdherent = lastAdherent.getDateFinAdherent();
-    
-                if (currentDate.isAfter(dateFinAdherent) || lastAdherent.getNbrEmprunt() == 0) {
-                    adherentRepository.deleteByClientId(adherent.getClientId());
-                    return adherentRepository.save(adherent);
-                }
-            } else {
-
-                System.err.println("Le dernier adhérent ou la date de fin d'adhésion est invalide.");
-                return null;
-            }
-        }
-    
-        return null; 
+@Transactional
+public Adherent ajouterAdherent(Adherent adherent) {
+    if (adherent == null || adherent.getClientId() == null) {
+        throw new IllegalArgumentException("L'adhérent ou son client ID est invalide.");
     }
-    
+
+    // Récupérer tous les adhérents pour le client
+    List<Adherent> adherentAll = trouverAdherentsParClient(adherent.getClientId());
+
+    if (adherentAll.isEmpty()) {
+        // Aucun adhérent existant, on ajoute directement
+        return adherentRepository.save(adherent);
+    }
+
+    // Récupérer le dernier adhérent existant
+    Adherent lastAdherent = adherentAll.get(adherentAll.size() - 1);
+    if (lastAdherent == null || lastAdherent.getDateFinAdherent() == null) {
+        throw new IllegalStateException("Le dernier adhérent ou sa date de fin est invalide.");
+    }
+
+    LocalDate currentDate = LocalDate.now();
+    LocalDate dateFinAdherent = lastAdherent.getDateFinAdherent();
+
+    // Vérifier si un nouvel adhérent doit être créé
+    if (currentDate.isAfter(dateFinAdherent) || lastAdherent.getNbrEmprunt() <= 0) {
+        // Supprimer les anciens adhérents pour ce client
+        adherentRepository.deleteByClientId(adherent.getClientId());
+
+        // Créer un nouvel adhérent
+        return adherentRepository.save(adherent);
+    }
+
+    // Retourner le dernier adhérent s'il est encore valide
+    return lastAdherent;
+}
+   
 
     public Optional<Adherent> trouverAdherentParId(Long id) {
         return adherentRepository.findById(id);

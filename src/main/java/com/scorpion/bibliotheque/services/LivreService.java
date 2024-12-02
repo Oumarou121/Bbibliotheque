@@ -1,6 +1,7 @@
 package com.scorpion.bibliotheque.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -19,24 +20,58 @@ public class LivreService {
         return livreRepository.findAll();
     }
 
+    public Optional<Livre> getLivreById(Long id) {
+        return livreRepository.findById(id);
+    }
+
     public Livre createLivre(Livre livre) {
         return livreRepository.save(livre);
     }
 
-    public Livre updateLivre(Long id, Livre livreDetails) {
+    public Livre ajouterLivre(String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description,
+    byte[] image){
+        Livre livre = new Livre();
+        livre.setTitre(titre);
+        livre.setAuteur(auteur);
+        livre.setAnneePublication(anneePublication);
+        livre.setQuantite(quantite);
+        livre.setNbrEmprunt(nbrEmprunt);
+        livre.setDescription(description);
+        livre.setImage(image);
+
+        return livreRepository.save(livre);
+    }
+
+    public Livre updateLivre(Long id, String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description,
+    byte[] image) {
         return livreRepository.findById(id)
                 .map(livre -> {
-                    livre.setTitre(livreDetails.getTitre());
-                    livre.setAuteur(livreDetails.getAuteur());
-                    livre.setAnneePublication(livreDetails.getAnneePublication());
-                    livre.setQuantite(livreDetails.getQuantite());
-                    livre.setDescription(livreDetails.getDescription());
-                    livre.setImage(livreDetails.getImage());
-                    livre.setNbrEmprunt(livreDetails.getNbrEmprunt());
+                    livre.setTitre(titre);
+                    livre.setAuteur(auteur);
+                    livre.setAnneePublication(anneePublication);
+                    livre.setQuantite(quantite);
+                    livre.setDescription(description);
+                    livre.setImage(image);
+                    livre.setNbrEmprunt(nbrEmprunt);
                     return livreRepository.save(livre);
                 })
                 .orElseThrow(() -> new RuntimeException("Livre non trouvé"));
     }
+
+    // public Livre updateLivre(Long id, Livre livreDetails) {
+    //     return livreRepository.findById(id)
+    //             .map(livre -> {
+    //                 livre.setTitre(livreDetails.getTitre());
+    //                 livre.setAuteur(livreDetails.getAuteur());
+    //                 livre.setAnneePublication(livreDetails.getAnneePublication());
+    //                 livre.setQuantite(livreDetails.getQuantite());
+    //                 livre.setDescription(livreDetails.getDescription());
+    //                 livre.setImage(livreDetails.getImage());
+    //                 livre.setNbrEmprunt(livreDetails.getNbrEmprunt());
+    //                 return livreRepository.save(livre);
+    //             })
+    //             .orElseThrow(() -> new RuntimeException("Livre non trouvé"));
+    // }
 
     public void deleteLivre(Long id) {
         livreRepository.deleteById(id);

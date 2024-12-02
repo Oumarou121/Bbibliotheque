@@ -13,5 +13,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     Optional<Favorite> findByClientIdAndLivreId(Long clientId, Long livreId);
 
+    void deleteByClientId(Long id);
+
 }
 

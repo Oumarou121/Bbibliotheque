@@ -9,7 +9,6 @@ import com.scorpion.bibliotheque.entites.Emprunt;
 import com.scorpion.bibliotheque.services.EmpruntService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/emprunts")
@@ -55,4 +54,5 @@ public class EmpruntController {
     public void supprimerEmprunt(@PathVariable Long id) {
         empruntService.supprimerEmprunt(id);
     }
+    
 }

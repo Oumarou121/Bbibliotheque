@@ -21,20 +21,27 @@ public class AdherentController {
     //     return adherentService.ajouterAdherent(adherent);
     // }
 
+
     @PostMapping
-    public ResponseEntity<Adherent> ajouterAdherent(@RequestBody Adherent adherent) {
-        if (adherent == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            Adherent newAdherent = adherentService.ajouterAdherent(adherent);
-
-            return new ResponseEntity<>(newAdherent, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+public ResponseEntity<?> ajouterAdherent(@RequestBody Adherent adherent) {
+    if (adherent == null) {
+        return ResponseEntity.badRequest().body("Les informations de l'adhérent sont invalides.");
     }
+
+    try {
+        Adherent newAdherent = adherentService.ajouterAdherent(adherent);
+        return new ResponseEntity<>(newAdherent, HttpStatus.CREATED);
+
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+
+    } catch (IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur interne s'est produite.");
+    }
+}
 
 
     // @GetMapping("/{id}")

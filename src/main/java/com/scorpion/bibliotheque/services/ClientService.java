@@ -1,99 +1,40 @@
-// package com.scorpion.bibliotheque.services;
-
-// import java.util.List;
-// import java.util.Optional;
-
-// import org.springframework.stereotype.Service;
-
-// import com.scorpion.bibliotheque.entites.Client;
-// import com.scorpion.bibliotheque.repository.ClientRepository;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.stereotype.Service;
-
-// @Service
-// public class ClientService {
-//     private final ClientRepository clientRepository;
-
-//     @Autowired
-//     private PasswordEncoder passwordEncoder;
-
-//     public ClientService(ClientRepository clientRepository) {
-//         this.clientRepository = clientRepository;
-//     }
-
-//     public List<Client> getAllClients() {
-//         return clientRepository.findAll();
-//     }
-    
-//     // public Client createClient(Client client) {
-//     //     return clientRepository.save(client);
-//     // }
-
-//     public Client register(Client client) {
-//         // Vérifiez si l'email existe déjà
-//         Optional<Client> existingUser = clientRepository.findByEmail(client.getEmail());
-//         if (existingUser.isPresent()) {
-//             throw new RuntimeException("Email déjà utilisé.");
-//         }
-
-//         // Encodez le mot de passe avant de sauvegarder
-//         client.setPassword(passwordEncoder.encode(client.getPassword()));
-
-//         return clientRepository.save(client);
-//     }
-
-//     public Client login(String email, String password) {
-//         Client client = clientRepository.findByEmail(email)
-//                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé."));
-
-//         // Vérifiez si le mot de passe est correct
-//         if (!passwordEncoder.matches(password, client.getPassword())) {
-//             throw new RuntimeException("Mot de passe incorrect.");
-//         }
-
-//         return client;
-//     }
-
-//     public Client updateClient(Long id, Client ClientDetails) {
-//         return clientRepository.findById(id)
-//                 .map(client -> {
-//                     client.setNom(ClientDetails.getNom());
-//                     client.setPrenom(ClientDetails.getPrenom());
-//                     client.setEmail(ClientDetails.getEmail());
-//                     client.setPassword(ClientDetails.getPassword());
-//                     return clientRepository.save(client);
-//                 })
-//                 .orElseThrow(() -> new RuntimeException("Client non trouvé"));
-//     }
-
-//     public void deleteClient(Long id) {
-//         clientRepository.deleteById(id);
-//     }
-// }
-
-
 package com.scorpion.bibliotheque.services;
 
 import com.scorpion.bibliotheque.entites.Client;
+import com.scorpion.bibliotheque.repository.AdherentRepository;
+import com.scorpion.bibliotheque.repository.CartRepository;
 import com.scorpion.bibliotheque.repository.ClientRepository;
+import com.scorpion.bibliotheque.repository.EmpruntRepository;
+import com.scorpion.bibliotheque.repository.FavoriteRepository;
 import com.scorpion.bibliotheque.utils.JwtUtil;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final EmpruntRepository empruntRepository;
+    private final AdherentRepository adherentRepository;
+    private final CartRepository cartRepository;
+    private final FavoriteRepository favoritesRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public ClientService(EmpruntRepository empruntRepository, AdherentRepository adherentRepository , CartRepository cartRepository, FavoriteRepository favoritesRepository, ClientRepository clientRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.clientRepository = clientRepository;
+        this.empruntRepository = empruntRepository;
+        this.adherentRepository = adherentRepository;
+        this.cartRepository = cartRepository;
+        this.favoritesRepository = favoritesRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
@@ -164,4 +105,37 @@ public class ClientService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable."));
     }
     
+    @Transactional
+    public Client updateClient(Long id, Client ClientDetails) {
+        return clientRepository.findById(id)
+                .map(client -> {
+                    client.setNom(ClientDetails.getNom());
+                    client.setAdresse(ClientDetails.getAdresse());
+                    client.setTelephone(ClientDetails.getTelephone());
+                    // client.setEmail(client.getEmail());
+                    // client.setPassword(client.getPassword());
+                    // client.setRole(client.getRole());
+                    client.setEmail(ClientDetails.getEmail());
+                    client.setPassword(client.getPassword());
+                    client.setRole(ClientDetails.getRole());
+                    return clientRepository.save(client);
+                })
+                .orElseThrow(() -> new RuntimeException("Client non trouvé"));
+    }
+
+    public List<Client> getAllClients(){
+        return clientRepository.findAll();
+    }
+    
+    @Transactional
+    public void deleteClient(Long id){
+        
+        // Supprimer les emprunts, carts, favorites, adhérents associés au client
+        empruntRepository.deleteByClientId(id);
+        cartRepository.deleteByClientId(id);
+        favoritesRepository.deleteByClientId(id);
+        adherentRepository.deleteByClientId(id);
+
+        clientRepository.deleteById(id);
+    }
 }
