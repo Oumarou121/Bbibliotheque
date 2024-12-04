@@ -104,6 +104,13 @@ public class ClientService {
         return clientRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable."));
     }
+
+    public String getEmailById(Long id) {
+        return clientRepository.findById(id)
+            .map(Client::getEmail) 
+            .orElseThrow(() -> new RuntimeException("Id invalide")); 
+    }
+    
     
     @Transactional
     public Client updateClient(Long id, Client ClientDetails) {

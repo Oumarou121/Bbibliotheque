@@ -14,10 +14,10 @@ public class Emprunt {
 
     private Long livreId;
 
-    @Column(updatable = false)
+    // @Column(updatable = false)
     private LocalDate dateEmprunt = LocalDate.now();
 
-    @Column(updatable = false)
+    // @Column(updatable = false)
     private LocalDate dateRetourPrevue = LocalDate.now().plusDays(7);
 
     public Emprunt(){

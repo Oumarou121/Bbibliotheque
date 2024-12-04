@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.scorpion.bibliotheque.entites.Livre;
 import com.scorpion.bibliotheque.entites.LivreDTO;
 import com.scorpion.bibliotheque.services.LivreService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -40,12 +42,6 @@ public class LivreController {
     public Optional<Livre> getLivreById(@PathVariable Long id) {
         return livreService.getLivreById(id);
     }
-    
-
-    // @PostMapping
-    // public Livre createLivre(@RequestBody Livre livre) {
-    //     return livreService.createLivre(livre);
-    // }
 
     @PostMapping
     public Livre ajouterLivre(@RequestBody LivreDTO livreDTO){
@@ -58,12 +54,6 @@ public class LivreController {
             return null;
         }
     }
-
-    // @PutMapping("/{id}")
-    // public Livre updateLivre(@PathVariable Long id, @RequestBody LivreDTO livreDetails) {
-    //     Livre livre = new Livre(livreDetails.get);
-    //     return livreService.updateLivre(id, livre);
-    // }
 
     @PutMapping("/{id}")
     public Livre updateLivre(@PathVariable Long id, @RequestBody LivreDTO livreDTO) {
@@ -90,4 +80,10 @@ public class LivreController {
         headers.add("Content-Type", "image/jpg");  // Changez le type si l'image n'est pas JPEG
         return new ResponseEntity<>(image, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/titre/{id}")
+    public String getTitreById(@PathVariable Long id) {
+        return livreService.getTitreById(id);
+    }
+    
 }

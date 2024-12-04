@@ -84,5 +84,11 @@ public class LivreService {
         }
         return null;
     }
+
+    public String getTitreById(Long id){
+        return livreRepository.findById(id)
+        .map(Livre::getTitre)
+        .orElseThrow(() -> new RuntimeException("Id invalide"));
+    }
 }
 
