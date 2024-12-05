@@ -39,21 +39,6 @@ public class ClientService {
         this.jwtUtil = jwtUtil;
     }
 
-    // Enregistrement d'un nouveau client
-    // public Client register(Client client) {
-    //     // Vérification si l'email existe déjà
-    //     Optional<Client> existingClient = clientRepository.findByEmail(client.getEmail());
-    //     if (existingClient.isPresent()) {
-    //         throw new RuntimeException("Cet email est déjà utilisé.");
-    //     }
-
-    //     // Encodage du mot de passe
-    //     client.setPassword(passwordEncoder.encode(client.getPassword()));
-
-    //     // Sauvegarde du client
-    //     return clientRepository.save(client);
-    // }
-
     public String register(Client client) {
         // Vérification si l'email existe déjà
         Optional<Client> existingClient = clientRepository.findByEmail(client.getEmail());

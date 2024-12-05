@@ -25,14 +25,14 @@ public class Client {
 
     }
 
-    public Client(long id, String email, String nom, String adresse, String telephone, String password, String role) {
+    public Client(long id, String email, String nom, String adresse, String telephone, String password) {
         this.id = id;
         this.email = email;
         this.nom = nom;
         this.adresse = adresse;
         this.telephone = telephone;
         this.password = password;
-        this.role = role;
+        this.role = "client";
     }
 
 
