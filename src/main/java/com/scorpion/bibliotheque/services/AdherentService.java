@@ -29,6 +29,17 @@ public Adherent ajouterAdherent(Adherent adherent) {
 
     if (adherentAll.isEmpty()) {
         // Aucun adhérent existant, on ajoute directement
+        if (adherent.getType() == 1) {
+            adherent.setNbrEmprunt((long) 5);
+        }
+
+        if (adherent.getType() == 2) {
+            adherent.setNbrEmprunt((long)15);
+        }
+        
+        if (adherent.getType() == 3) {
+            adherent.setNbrEmprunt((long)35);
+        }
         return adherentRepository.save(adherent);
     }
 
@@ -53,7 +64,7 @@ public Adherent ajouterAdherent(Adherent adherent) {
         if (adherent.getType() == 2) {
             adherent.setNbrEmprunt((long)15);
         }
-        
+
         if (adherent.getType() == 3) {
             adherent.setNbrEmprunt((long)35);
         }
