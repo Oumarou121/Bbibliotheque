@@ -57,6 +57,23 @@ public class ClientService {
         // Génération du token JWT
         return jwtUtil.generateToken(savedClient.getEmail());
     }
+
+    public String registerAdmin(Client client) {
+        // Vérification si l'email existe déjà
+        Optional<Client> existingClient = clientRepository.findByEmail(client.getEmail());
+        if (existingClient.isPresent()) {
+            throw new RuntimeException("Cet email est déjà utilisé.");
+        }
+    
+        // Encodage du mot de passe
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
+    
+        // Sauvegarde du client
+        Client savedClient = clientRepository.save(client);
+    
+        // Génération du token JWT
+        return jwtUtil.generateToken(savedClient.getEmail());
+    }
     
 
     // Connexion d'un client

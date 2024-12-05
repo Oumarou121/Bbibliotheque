@@ -42,7 +42,7 @@ public class ClientController {
     @PostMapping("/admin/register")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody Client client) {
         try {
-            String token = clientService.register(client);
+            String token = clientService.registerAdmin(client);
             return ResponseEntity.ok().body(client.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
