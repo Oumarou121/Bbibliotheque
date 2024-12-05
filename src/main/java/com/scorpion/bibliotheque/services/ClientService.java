@@ -45,6 +45,8 @@ public class ClientService {
         if (existingClient.isPresent()) {
             throw new RuntimeException("Cet email est déjà utilisé.");
         }
+
+        client.setRole("client");
     
         // Encodage du mot de passe
         client.setPassword(passwordEncoder.encode(client.getPassword()));
