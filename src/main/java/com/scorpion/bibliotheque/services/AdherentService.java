@@ -46,6 +46,20 @@ public Adherent ajouterAdherent(Adherent adherent) {
         // Supprimer les anciens adhérents pour ce client
         adherentRepository.deleteByClientId(adherent.getClientId());
 
+        if (adherent.getNbrEmprunt() <= 0) {
+            if (adherent.getType() == 1) {
+                adherent.setNbrEmprunt((long) 5);
+            }
+
+            if (adherent.getType() == 2) {
+                adherent.setNbrEmprunt((long)15);
+            }
+
+            if (adherent.getType() == 3) {
+                adherent.setNbrEmprunt((long)35);
+            }
+        }
+
         // Créer un nouvel adhérent
         return adherentRepository.save(adherent);
     }
