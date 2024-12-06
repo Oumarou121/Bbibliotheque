@@ -1,6 +1,7 @@
 package com.scorpion.bibliotheque.entites;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "livre")
@@ -18,7 +19,10 @@ public class Livre {
     @Lob  // Annotation pour indiquer que c'est un gros objet binaire
     private byte[] image;  // Changez ici pour byte[] au lieu de String
     
+    @Column(columnDefinition = "TEXT")
+    @Size(max = 65535, message = "La description ne peut pas dépasser 65535 caractères")
     private String description;
+
 
     public Livre() {
     }
