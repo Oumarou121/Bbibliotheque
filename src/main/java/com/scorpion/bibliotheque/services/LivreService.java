@@ -70,19 +70,27 @@ public class LivreService {
 
     public Livre updateLivre(Long id, String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description,
     byte[] image) {
-        return livreRepository.findById(id)
-                .map(livre -> {
-                    livre.setTitre(titre);
-                    livre.setAuteur(auteur);
-                    livre.setAnneePublication(anneePublication);
-                    livre.setQuantite(quantite);
-                    livre.setDescription(description);
-                    livre.setImage(image);
-                    livre.setNbrEmprunt(nbrEmprunt);
-                    return livreRepository.save(livre);
-                })
-                .orElseThrow(() -> new RuntimeException("Livre non trouvé"));
+
+    Livre livre = livreRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Livre non trouvé"));
+
+    if (livre.getDescription() == null || livre.getDescription().isEmpty() || 
+        !livre.getTitre().equals(titre) || !livre.getAuteur().equals(auteur)) {
+        
+        description = bookSearchService.fetchBookDetails(titre, auteur);
     }
+
+    livre.setTitre(titre);
+    livre.setAuteur(auteur);
+    livre.setAnneePublication(anneePublication);
+    livre.setQuantite(quantite);
+    livre.setDescription(description);
+    livre.setImage(image);
+    livre.setNbrEmprunt(nbrEmprunt);
+
+    return livreRepository.save(livre);
+}
+
 
     // public Livre updateLivre(Long id, Livre livreDetails) {
     //     return livreRepository.findById(id)
