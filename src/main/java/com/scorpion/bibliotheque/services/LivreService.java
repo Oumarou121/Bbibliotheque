@@ -10,10 +10,18 @@ import com.scorpion.bibliotheque.repository.LivreRepository;
 
 @Service
 public class LivreService {
-    private final LivreRepository livreRepository;
+    // private final LivreRepository livreRepository;
 
-    public LivreService(LivreRepository livreRepository) {
+    // public LivreService(LivreRepository livreRepository) {
+    //     this.livreRepository = livreRepository;
+    // }
+
+    private final LivreRepository livreRepository;
+    private final BookService bookSearchService;
+
+    public LivreService(LivreRepository livreRepository, BookService bookSearchService) {
         this.livreRepository = livreRepository;
+        this.bookSearchService = bookSearchService;
     }
 
     public List<Livre> getAllLivres() {
@@ -28,8 +36,26 @@ public class LivreService {
         return livreRepository.save(livre);
     }
 
-    public Livre ajouterLivre(String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description,
-    byte[] image){
+    // public Livre ajouterLivre(String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description,
+    // byte[] image){
+    //     Livre livre = new Livre();
+    //     livre.setTitre(titre);
+    //     livre.setAuteur(auteur);
+    //     livre.setAnneePublication(anneePublication);
+    //     livre.setQuantite(quantite);
+    //     livre.setNbrEmprunt(nbrEmprunt);
+    //     livre.setDescription(description);
+    //     livre.setImage(image);
+
+    //     return livreRepository.save(livre);
+    // }
+
+    public Livre ajouterLivre(String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description, byte[] image) {
+        // Rechercher une description si elle n'est pas fournie
+        if (description == null || description.isEmpty()) {
+            description = bookSearchService.fetchBookDetails(titre, auteur);
+        }
+
         Livre livre = new Livre();
         livre.setTitre(titre);
         livre.setAuteur(auteur);
