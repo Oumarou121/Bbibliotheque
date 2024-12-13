@@ -123,9 +123,6 @@ public class ClientService {
                     client.setNom(ClientDetails.getNom());
                     client.setAdresse(ClientDetails.getAdresse());
                     client.setTelephone(ClientDetails.getTelephone());
-                    // client.setEmail(client.getEmail());
-                    // client.setPassword(client.getPassword());
-                    // client.setRole(client.getRole());
                     client.setEmail(ClientDetails.getEmail());
                     client.setPassword(client.getPassword());
                     client.setRole(ClientDetails.getRole());

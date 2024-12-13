@@ -31,7 +31,6 @@ public class Cart {
         this.clientId = clientId;
         this.livreId = livreId;
         this.quantity = quantity;
-        // this.addedAt = addedAt;
     }
 
     public Long getId() {

@@ -1,4 +1,4 @@
-package com.scorpion.bibliotheque.config;
+package com.scorpion.bibliotheque.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,12 +8,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.scorpion.bibliotheque.config.JwtAuthenticationFilter;
+
 
 @Configuration
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter; // Assurez-vous que ce composant est bien déclaré
+    private JwtAuthenticationFilter jwtAuthenticationFilter; 
 
     @Bean
     public PasswordEncoder passwordEncoder() {

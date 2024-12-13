@@ -16,11 +16,6 @@ public class AdherentController {
     @Autowired
     private AdherentService adherentService;
 
-    // @PostMapping
-    // public Adherent ajouterAdherent(@RequestBody Adherent adherent) {
-    //     return adherentService.ajouterAdherent(adherent);
-    // }
-
 
     @PostMapping
 public ResponseEntity<?> ajouterAdherent(@RequestBody Adherent adherent) {
@@ -42,12 +37,6 @@ public ResponseEntity<?> ajouterAdherent(@RequestBody Adherent adherent) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Une erreur interne s'est produite.");
     }
 }
-
-
-    // @GetMapping("/{id}")
-    // public Optional<Adherent> trouverAdherentParId(@PathVariable Long id) {
-    //     return adherentService.trouverAdherentParId(id);
-    // }
 
     @GetMapping("/{id}")
     public List<Adherent> trouverAdherentParClient(@PathVariable Long id) {

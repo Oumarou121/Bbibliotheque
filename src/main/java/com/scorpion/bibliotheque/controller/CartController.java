@@ -22,11 +22,6 @@ public class CartController {
         return cartService.getCartByClientId(clientId);
     }
 
-    // @PostMapping
-    // public Cart addToCart(@RequestBody Cart cart) {
-    //     return cartService.addToCart(cart);
-    // }
-
     @PostMapping
 public ResponseEntity<Cart> addToCart(@RequestBody Cart cart) {
     try {
@@ -34,7 +29,7 @@ public ResponseEntity<Cart> addToCart(@RequestBody Cart cart) {
         return ResponseEntity.status(HttpStatus.CREATED).body(addedCart);
     } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(null);  // Vous pouvez aussi retourner un message d'erreur détaillé
+                             .body(null);  
     }
 }
 

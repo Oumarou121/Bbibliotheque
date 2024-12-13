@@ -45,19 +45,6 @@ public class EmpruntController {
         return empruntService.modifierEmprunt(emprunt);
     }
 
-//     @PutMapping("/{id}")
-// public ResponseEntity<Emprunt> modifierEmprunt(@PathVariable Long id, @RequestBody Emprunt emprunt) {
-//     try {
-//         Emprunt updatedEmprunt = empruntService.modifierEmprunt(id, emprunt);
-//         return ResponseEntity.ok(updatedEmprunt);
-//     } catch (IllegalArgumentException ex) {
-//         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-//     } catch (Exception ex) {
-//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//     }
-// }
-
-
     @DeleteMapping("/{id}")
     public void supprimerEmprunt(@PathVariable Long id) {
         empruntService.supprimerEmprunt(id);

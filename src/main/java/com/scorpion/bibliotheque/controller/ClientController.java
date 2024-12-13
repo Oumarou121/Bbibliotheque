@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -28,7 +27,6 @@ public class ClientController {
         this.invalidTokenService = invalidTokenService;
     }
 
-    // Endpoint pour l'enregistrement d'un client
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody Client client) {
         try {
@@ -42,14 +40,13 @@ public class ClientController {
     @PostMapping("/admin/register")
     public ResponseEntity<?> registerAdmin(@Valid @RequestBody Client client) {
         try {
-            String token = clientService.registerAdmin(client);
+            clientService.registerAdmin(client);
             return ResponseEntity.ok().body(client.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    // Endpoint pour la connexion
     @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
     try {
@@ -61,7 +58,6 @@ public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
 }
 
 
-    // Endpoint pour valider un token (facultatif, utile pour tester)
     @GetMapping("/validate-token")
     public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
         try {
@@ -72,23 +68,18 @@ public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         }
     }
 
-    // Endpoint pour la déconnexion (ajout du token à la liste des tokens invalidés)
     @PostMapping("/logout")
 public ResponseEntity<?> logout(@RequestHeader("Authorization") String authorizationHeader) {
-    // Vérification de l'en-tête Authorization
     if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
         return ResponseEntity.badRequest().body("Token manquant ou invalide.");
     }
 
-    // Extraire le token
     String token = authorizationHeader.substring(7);
 
-    // Vérifier si le token est déjà invalidé
     if (invalidTokenService.isTokenInvalid(token)) {
         return ResponseEntity.badRequest().body("Token déjà invalidé.");
     }
 
-    // Ajouter le token à la liste noire
     invalidTokenService.addInvalidToken(token);
 
     return ResponseEntity.ok("Déconnexion réussie. Token invalidé.");
@@ -100,9 +91,8 @@ public ResponseEntity<?> logout(@RequestHeader("Authorization") String authoriza
             return ResponseEntity.badRequest().body("Token manquant ou invalide.");
         }
 
-        String token = authorizationHeader.substring(7); // Enlever le "Bearer " du token
+        String token = authorizationHeader.substring(7);
         try {
-            // Obtenez le client en validant le token
             Client client = clientService.getClientFromToken(token);
             return ResponseEntity.ok(client);
         } catch (RuntimeException e) {

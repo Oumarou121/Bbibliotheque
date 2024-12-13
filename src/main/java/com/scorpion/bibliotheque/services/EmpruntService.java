@@ -147,24 +147,7 @@ public class EmpruntService {
     }
     
 
-    // public Emprunt modifierEmprunt(Long id, Emprunt empruntDetails) {
-    //     return empruntRepository.findById(id)
-    //             .map(emprunt -> {
-    //                 if (empruntDetails.getClientId() == null || empruntDetails.getLivreId() == null) {
-    //                     throw new IllegalArgumentException("Les champs clientId et livreId sont obligatoires");
-    //                 }
-    //                 emprunt.setClientId(empruntDetails.getClientId());
-    //                 emprunt.setLivreId(empruntDetails.getLivreId());
-    //                 emprunt.setDateEmprunt(empruntDetails.getDateEmprunt());
-    //                 emprunt.setDateRetourPrevue(empruntDetails.getDateRetourPrevue());
-    //                 return empruntRepository.save(emprunt);
-    //             })
-    //             .orElseThrow(() -> new RuntimeException("Emprunt avec ID non trouvé"));
-    // }
-    
-
     public void supprimerEmprunt(Long id) {
-        // empruntRepository.deleteById(id);
 
         Emprunt emprunt = trouverEmpruntParId(id).orElseThrow(() -> new RuntimeException("Emprunt non trouvé avec l'ID: " + id));
         Livre livre = livreRepository.findById(emprunt.getLivreId()).orElseThrow(() -> new RuntimeException("Livre non trouvé avec l'ID: " + emprunt.getLivreId()));

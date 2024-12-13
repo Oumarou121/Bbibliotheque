@@ -61,8 +61,6 @@ public class Favorite {
     public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
-
-    // Getters and Setters
     
 }
 

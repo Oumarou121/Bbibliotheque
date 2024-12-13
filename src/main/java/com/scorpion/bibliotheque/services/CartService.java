@@ -19,10 +19,6 @@ public class CartService {
         return cartRepository.findByClientId(clientId);
     }
 
-    // public Cart addToCart(Cart cart) {
-    //     return cartRepository.save(cart);
-    // }
-
     public Cart addToCart(Cart cart) {
         // Vérifier si le client a déjà ce livre dans son panier
         Optional<Cart> existingCart = cartRepository.findByClientIdAndLivreId(cart.getClientId(), cart.getLivreId());

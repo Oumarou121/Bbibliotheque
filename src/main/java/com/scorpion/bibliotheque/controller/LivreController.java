@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.scorpion.bibliotheque.entites.Livre;
 import com.scorpion.bibliotheque.entites.LivreDTO;
 import com.scorpion.bibliotheque.services.LivreService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -68,7 +67,6 @@ public class LivreController {
         livreService.deleteLivre(id);
     }
 
-    // Endpoint pour récupérer l'image d'un livre
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getLivreImage(@PathVariable Long id) {
         byte[] image = livreService.getLivreImage(id);

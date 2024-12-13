@@ -10,11 +10,6 @@ import com.scorpion.bibliotheque.repository.LivreRepository;
 
 @Service
 public class LivreService {
-    // private final LivreRepository livreRepository;
-
-    // public LivreService(LivreRepository livreRepository) {
-    //     this.livreRepository = livreRepository;
-    // }
 
     private final LivreRepository livreRepository;
     private final BookService bookSearchService;
@@ -35,20 +30,6 @@ public class LivreService {
     public Livre createLivre(Livre livre) {
         return livreRepository.save(livre);
     }
-
-    // public Livre ajouterLivre(String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description,
-    // byte[] image){
-    //     Livre livre = new Livre();
-    //     livre.setTitre(titre);
-    //     livre.setAuteur(auteur);
-    //     livre.setAnneePublication(anneePublication);
-    //     livre.setQuantite(quantite);
-    //     livre.setNbrEmprunt(nbrEmprunt);
-    //     livre.setDescription(description);
-    //     livre.setImage(image);
-
-    //     return livreRepository.save(livre);
-    // }
 
     public Livre ajouterLivre(String titre, String auteur, int anneePublication, int quantite, int nbrEmprunt, String description, byte[] image) {
         // Rechercher une description si elle n'est pas fournie
@@ -91,22 +72,6 @@ public class LivreService {
     return livreRepository.save(livre);
 }
 
-
-    // public Livre updateLivre(Long id, Livre livreDetails) {
-    //     return livreRepository.findById(id)
-    //             .map(livre -> {
-    //                 livre.setTitre(livreDetails.getTitre());
-    //                 livre.setAuteur(livreDetails.getAuteur());
-    //                 livre.setAnneePublication(livreDetails.getAnneePublication());
-    //                 livre.setQuantite(livreDetails.getQuantite());
-    //                 livre.setDescription(livreDetails.getDescription());
-    //                 livre.setImage(livreDetails.getImage());
-    //                 livre.setNbrEmprunt(livreDetails.getNbrEmprunt());
-    //                 return livreRepository.save(livre);
-    //             })
-    //             .orElseThrow(() -> new RuntimeException("Livre non trouvé"));
-    // }
-
     public void deleteLivre(Long id) {
         livreRepository.deleteById(id);
     }
@@ -114,7 +79,7 @@ public class LivreService {
     public byte[] getLivreImage(Long id) {
         Livre livre = livreRepository.findById(id).orElse(null);
         if (livre != null && livre.getImage() != null) {
-            return livre.getImage(); // `image` est supposé être un champ de type byte[]
+            return livre.getImage(); 
         }
         return null;
     }

@@ -16,8 +16,8 @@ public class Livre {
     private int quantite;
     private int nbrEmprunt;
     
-    @Lob  // Annotation pour indiquer que c'est un gros objet binaire
-    private byte[] image;  // Changez ici pour byte[] au lieu de String
+    @Lob  
+    private byte[] image;  
     
     @Column(columnDefinition = "TEXT")
     @Size(max = 65535, message = "La description ne peut pas dépasser 65535 caractères")
